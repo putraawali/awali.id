@@ -13,10 +13,16 @@ export function Toast({ visible, message }: ToastProps) {
             }`}
             id="toast"
         >
-            <span className="material-symbols-outlined text-tertiary" style={{ fontVariationSettings: '"FILL" 1' }}>
+            <span
+                className="material-symbols-outlined text-tertiary"
+                style={{ fontVariationSettings: '"FILL" 1' }}
+            >
                 check_circle
             </span>
-            <span className="text-label-bold font-label-bold text-on-surface" id="toast-text">
+            <span
+                className="text-label-bold font-label-bold text-on-surface"
+                id="toast-text"
+            >
                 {message}
             </span>
         </div>

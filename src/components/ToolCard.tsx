@@ -83,7 +83,14 @@ export function ToolCard({
             </div>
 
             <div className="glass-card w-full max-w-lg p-stack-md md:p-stack-lg rounded-xl flex flex-col relative z-10 transition-all duration-500 hover:shadow-2xl space-y-4">
-                <div className={tab === "url" ? "space-y-stack-sm block" : "space-y-stack-sm hidden"} id="url-view">
+                <div
+                    className={
+                        tab === "url"
+                            ? "space-y-stack-sm block"
+                            : "space-y-stack-sm hidden"
+                    }
+                    id="url-view"
+                >
                     <label
                         className="text-label-bold font-label-bold text-on-surface-variant ml-1"
                         htmlFor="url-input"
@@ -100,7 +107,9 @@ export function ToolCard({
                             placeholder={urlPlaceholder}
                             type="url"
                             value={urlInput}
-                            onChange={(event) => onUrlChange(event.target.value)}
+                            onChange={(event) =>
+                                onUrlChange(event.target.value)
+                            }
                         />
                     </div>
                     <div className="flex flex-col md:flex-row items-end gap-4 mt-stack-md">
@@ -119,7 +128,9 @@ export function ToolCard({
                                     placeholder={aliasPlaceholder}
                                     type="text"
                                     value={aliasInput}
-                                    onChange={(event) => onAliasChange(event.target.value)}
+                                    onChange={(event) =>
+                                        onAliasChange(event.target.value)
+                                    }
                                 />
                             </div>
                         </div>
@@ -210,11 +221,16 @@ export function ToolCard({
                                 </span>
                                 <div
                                     className={`absolute inset-0 flex items-center justify-center bg-white/80 transition-opacity ${
-                                        qrPreviewReady ? "opacity-100" : "opacity-0"
+                                        qrPreviewReady
+                                            ? "opacity-100"
+                                            : "opacity-0"
                                     }`}
                                     id="qr-placeholder-text"
                                 >
-                                    <span className="text-label-sm font-label-sm text-primary" id="qr-preview-ready">
+                                    <span
+                                        className="text-label-sm font-label-sm text-primary"
+                                        id="qr-preview-ready"
+                                    >
                                         {t.previewReady}
                                     </span>
                                 </div>

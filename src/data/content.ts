@@ -61,5 +61,5 @@ export const placeholders = {
     },
 };
 
-type Translation = typeof translations["en"];
+type Translation = (typeof translations)["en"];
 export type { Translation };

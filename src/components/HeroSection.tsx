@@ -14,7 +14,10 @@ export function HeroSection({ t }: HeroSectionProps) {
                 >
                     {t.headline}
                 </h1>
-                <p className="font-body-lg text-body-lg text-on-surface-variant" id="main-subheadline">
+                <p
+                    className="font-body-lg text-body-lg text-on-surface-variant"
+                    id="main-subheadline"
+                >
                     {t.subheadline}
                 </p>
                 <div className="hidden md:block mt-stack-lg pt-stack-lg border-t border-outline-variant/30">
@@ -23,7 +26,10 @@ export function HeroSection({ t }: HeroSectionProps) {
                             <span className="text-label-bold font-label-bold text-on-surface">
                                 99.9%
                             </span>
-                            <span className="text-label-sm font-label-sm text-on-surface-variant" id="uptime-label">
+                            <span
+                                className="text-label-sm font-label-sm text-on-surface-variant"
+                                id="uptime-label"
+                            >
                                 {t.uptime}
                             </span>
                         </div>
@@ -32,7 +38,10 @@ export function HeroSection({ t }: HeroSectionProps) {
                             <span className="text-label-bold font-label-bold text-on-surface">
                                 24/7
                             </span>
-                            <span className="text-label-sm font-label-sm text-on-surface-variant" id="support-label">
+                            <span
+                                className="text-label-sm font-label-sm text-on-surface-variant"
+                                id="support-label"
+                            >
                                 {t.support}
                             </span>
                         </div>
@@ -41,7 +50,10 @@ export function HeroSection({ t }: HeroSectionProps) {
                             <span className="text-label-bold font-label-bold text-on-surface">
                                 Global
                             </span>
-                            <span className="text-label-sm font-label-sm text-on-surface-variant" id="cdns-label">
+                            <span
+                                className="text-label-sm font-label-sm text-on-surface-variant"
+                                id="cdns-label"
+                            >
                                 {t.cdns}
                             </span>
                         </div>
