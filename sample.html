@@ -1,0 +1,822 @@
+<!doctype html>
+
+<html class="light" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+        <title>Awali. | Shorter links, better starts.</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+        <script id="tailwind-config">
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            "on-error": "#ffffff",
+                            "on-primary": "#ffffff",
+                            surface: "#f8f9fa",
+                            secondary: "#0060ac",
+                            "on-secondary": "#ffffff",
+                            "on-primary-fixed-variant": "#004395",
+                            "secondary-container": "#64a8fe",
+                            "on-secondary-container": "#003c70",
+                            "inverse-on-surface": "#f0f1f2",
+                            "on-error-container": "#93000a",
+                            "on-tertiary": "#ffffff",
+                            "surface-container-high": "#e7e8e9",
+                            "on-background": "#191c1d",
+                            "on-secondary-fixed": "#001c39",
+                            "surface-container-highest": "#e1e3e4",
+                            "on-primary-container": "#fefcff",
+                            "on-surface": "#191c1d",
+                            outline: "#727785",
+                            "inverse-surface": "#2e3132",
+                            "tertiary-fixed-dim": "#ffb786",
+                            "outline-variant": "#c2c6d6",
+                            "primary-fixed-dim": "#adc6ff",
+                            "on-tertiary-fixed-variant": "#723600",
+                            "primary-fixed": "#d8e2ff",
+                            "on-tertiary-fixed": "#311400",
+                            "surface-tint": "#005ac2",
+                            "surface-bright": "#f8f9fa",
+                            "secondary-fixed": "#d4e3ff",
+                            "on-surface-variant": "#424754",
+                            "tertiary-fixed": "#ffdcc6",
+                            primary: "#0058be",
+                            "surface-dim": "#d9dadb",
+                            "secondary-fixed-dim": "#a4c9ff",
+                            "tertiary-container": "#b75b00",
+                            "primary-container": "#2170e4",
+                            "surface-variant": "#e1e3e4",
+                            tertiary: "#924700",
+                            "error-container": "#ffdad6",
+                            "inverse-primary": "#adc6ff",
+                            "surface-container": "#edeeef",
+                            "on-primary-fixed": "#001a42",
+                            error: "#ba1a1a",
+                            background: "#f8f9fa",
+                            "surface-container-low": "#f3f4f5",
+                            "surface-container-lowest": "#ffffff",
+                            "on-tertiary-container": "#fffbff",
+                            "on-secondary-fixed-variant": "#004883",
+                        },
+                        borderRadius: {
+                            DEFAULT: "0.25rem",
+                            lg: "0.5rem",
+                            xl: "0.75rem",
+                            full: "9999px",
+                        },
+                        spacing: {
+                            "container-padding-mb": "24px",
+                            "stack-md": "24px",
+                            base: "8px",
+                            gutter: "24px",
+                            "container-padding-dt": "64px",
+                            "stack-lg": "48px",
+                            "stack-sm": "12px",
+                        },
+                        fontFamily: {
+                            "label-bold": ["Plus Jakarta Sans"],
+                            "label-sm": ["Plus Jakarta Sans"],
+                            "display-lg-mobile": ["Plus Jakarta Sans"],
+                            "headline-md": ["Plus Jakarta Sans"],
+                            "body-lg": ["Plus Jakarta Sans"],
+                            "display-lg": ["Plus Jakarta Sans"],
+                            "body-md": ["Plus Jakarta Sans"],
+                        },
+                        fontSize: {
+                            "label-bold": [
+                                "14px",
+                                {
+                                    lineHeight: "1",
+                                    letterSpacing: "0.02em",
+                                    fontWeight: "600",
+                                },
+                            ],
+                            "label-sm": [
+                                "12px",
+                                { lineHeight: "1", fontWeight: "500" },
+                            ],
+                            "display-lg-mobile": [
+                                "32px",
+                                {
+                                    lineHeight: "1.2",
+                                    letterSpacing: "-0.03em",
+                                    fontWeight: "800",
+                                },
+                            ],
+                            "headline-md": [
+                                "24px",
+                                {
+                                    lineHeight: "1.3",
+                                    letterSpacing: "-0.02em",
+                                    fontWeight: "700",
+                                },
+                            ],
+                            "body-lg": [
+                                "18px",
+                                { lineHeight: "1.6", fontWeight: "400" },
+                            ],
+                            "display-lg": [
+                                "48px",
+                                {
+                                    lineHeight: "1.1",
+                                    letterSpacing: "-0.04em",
+                                    fontWeight: "800",
+                                },
+                            ],
+                            "body-md": [
+                                "16px",
+                                { lineHeight: "1.5", fontWeight: "400" },
+                            ],
+                        },
+                    },
+                },
+            };
+        </script>
+        <style>
+            .glass-card {
+                background: rgba(255, 255, 255, 0.5);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.7);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            }
+
+            .animated-wave-bg {
+                background: linear-gradient(
+                    135deg,
+                    #f0f9ff 0%,
+                    #bae6fd 25%,
+                    #e0f2fe 50%,
+                    #bae6fd 75%,
+                    #f0f9ff 100%
+                );
+                background-size: 400% 400%;
+                animation: waveGradient 15s ease infinite;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: -1;
+            }
+
+            @keyframes waveGradient {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+
+            .material-symbols-outlined {
+                font-variation-settings:
+                    "FILL" 0,
+                    "wght" 400,
+                    "GRAD" 0,
+                    "opsz" 24;
+            }
+
+            /* Smooth transition for sticky header */
+            #main-header {
+                transition:
+                    background-color 0.4s ease,
+                    backdrop-filter 0.4s ease,
+                    box-shadow 0.4s ease,
+                    padding 0.4s ease,
+                    border-color 0.4s ease;
+            }
+
+            /* Frosted Glass scrolled state - Using light sky blue */
+            header.scrolled {
+                background-color: rgba(224, 242, 254, 0.6) !important;
+                backdrop-filter: blur(12px) !important;
+                -webkit-backdrop-filter: blur(12px) !important;
+                border-bottom: 1px solid rgba(186, 230, 253, 0.3);
+            }
+
+            header.scrolled .text-on-surface {
+                color: #191c1d !important;
+            }
+
+            .lang-transition {
+                transition:
+                    opacity 0.3s ease,
+                    transform 0.3s ease;
+            }
+        </style>
+    </head>
+    <body class="bg-background min-h-[100vh] overflow-x-hidden">
+        <!-- Waving Animated Background -->
+        <div class="animated-wave-bg"></div>
+        <!-- Top App Bar (Sticky Header) -->
+        <header
+            class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-container-padding-mb md:px-container-padding-dt border-b border-transparent bg-transparent py-stack-sm"
+            id="main-header"
+        >
+            <div
+                class="text-headline-md font-headline-md font-extrabold tracking-tighter text-on-surface"
+            >
+                Awali.
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- Language Toggle -->
+                <div
+                    class="glass-card flex p-1 rounded-full items-center text-label-sm font-label-bold overflow-hidden shadow-sm"
+                >
+                    <button
+                        class="px-3 py-1.5 rounded-full transition-all duration-300 bg-primary text-white"
+                        id="lang-en"
+                        onclick="setLanguage('en')"
+                    >
+                        EN
+                    </button>
+                    <button
+                        class="px-3 py-1.5 rounded-full transition-all duration-300 text-on-surface hover:bg-white/40"
+                        id="lang-id"
+                        onclick="setLanguage('id')"
+                    >
+                        ID
+                    </button>
+                </div>
+                <a
+                    class="glass-card flex items-center gap-2 px-4 py-2 rounded-full text-label-bold font-label-bold text-on-surface hover:bg-white/60 transition-all duration-300 active:scale-95 group shadow-sm"
+                    href="https://saweria.co/putraawali"
+                    id="support-btn"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    <span
+                        class="material-symbols-outlined text-[18px] text-tertiary group-hover:animate-bounce"
+                        >coffee</span
+                    >
+                    <span class="hidden sm:inline" id="support-text"
+                        >Buy me a coffee</span
+                    >
+                </a>
+            </div>
+        </header>
+        <main
+            class="min-h-screen flex flex-col md:flex-row pt-20 relative z-10"
+        >
+            <!-- Left Side: Branding & Headlines -->
+            <section
+                class="w-full md:w-1/2 flex flex-col justify-center px-container-padding-mb md:px-container-padding-dt py-stack-lg space-y-stack-md"
+            >
+                <div class="max-w-xl lang-transition" id="hero-content">
+                    <h1
+                        class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-stack-sm"
+                        id="main-headline"
+                    >
+                        Awali. Shorter links, better starts.
+                    </h1>
+                    <p
+                        class="font-body-lg text-body-lg text-on-surface-variant"
+                        id="main-subheadline"
+                    >
+                        Create clean, memorable links and instant QR codes in
+                        seconds. Enhance your digital footprint with
+                        precision-engineered tools.
+                    </p>
+                    <!-- Atmospheric Visual Element -->
+                    <div
+                        class="hidden md:block mt-stack-lg pt-stack-lg border-t border-outline-variant/30"
+                    >
+                        <div class="flex gap-stack-md items-center opacity-60">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-label-bold font-label-bold text-on-surface"
+                                    >99.9%</span
+                                >
+                                <span
+                                    class="text-label-sm font-label-sm text-on-surface-variant"
+                                    id="uptime-label"
+                                    >Uptime</span
+                                >
+                            </div>
+                            <div class="w-px h-8 bg-outline-variant/30"></div>
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-label-bold font-label-bold text-on-surface"
+                                    >24/7</span
+                                >
+                                <span
+                                    class="text-label-sm font-label-sm text-on-surface-variant"
+                                    id="support-label"
+                                    >Support</span
+                                >
+                            </div>
+                            <div class="w-px h-8 bg-outline-variant/30"></div>
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-label-bold font-label-bold text-on-surface"
+                                    >Global</span
+                                >
+                                <span
+                                    class="text-label-sm font-label-sm text-on-surface-variant"
+                                    id="cdns-label"
+                                    >CDNs</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Right Side: Tooling & Glassmorphism Card -->
+            <section
+                class="w-full md:w-1/2 flex items-center justify-center px-container-padding-mb md:px-container-padding-dt py-stack-lg relative overflow-hidden flex-col"
+            >
+                <!-- Decorative Background Glow -->
+                <div
+                    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none"
+                ></div>
+                <div
+                    class="glass-card mb-stack-sm p-1.5 rounded-xl flex justify-center self-center w-fit relative z-10 transition-all duration-500 hover:shadow-lg"
+                >
+                    <div class="flex" id="tab-container-new">
+                        <button
+                            class="px-6 py-2.5 text-label-bold font-label-bold transition-all border-b-2 border-primary text-primary"
+                            id="tab-url"
+                            onclick="switchTab('url')"
+                        >
+                            Shorten URL
+                        </button>
+                        <button
+                            class="px-6 py-2.5 text-label-bold font-label-bold transition-all border-b-2 hover:text-on-surface border-transparent text-on-surface-variant"
+                            id="tab-qr"
+                            onclick="switchTab('qr')"
+                        >
+                            QR Code
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="glass-card w-full max-w-lg p-stack-md md:p-stack-lg rounded-xl flex flex-col relative z-10 transition-all duration-500 hover:shadow-2xl space-y-4"
+                >
+                    <!-- Tabs -->
+                    <!-- Shorten URL View -->
+                    <div class="space-y-stack-sm block" id="url-view">
+                        <label
+                            class="text-label-bold font-label-bold text-on-surface-variant ml-1"
+                            for="url-input"
+                            id="url-input-label"
+                            >Paste your long URL here...</label
+                        >
+                        <div class="relative group">
+                            <input
+                                class="w-full bg-white/50 backdrop-blur-md border-white/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none"
+                                id="url-input"
+                                placeholder="https://example.com/very-long-and-complex-path"
+                                type="url"
+                            />
+                        </div>
+                        <div
+                            class="flex flex-col md:flex-row items-end gap-4 mt-stack-md"
+                        >
+                            <div class="flex-1 space-y-stack-sm w-full">
+                                <label
+                                    class="text-label-bold font-label-bold text-on-surface-variant ml-1"
+                                    for="alias-input"
+                                    id="alias-input-label"
+                                    >Custom Alias (Optional)</label
+                                >
+                                <div class="relative group">
+                                    <input
+                                        class="w-full bg-white/50 backdrop-blur-md border-white/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none"
+                                        id="alias-input"
+                                        placeholder="my-custom-link"
+                                        type="text"
+                                    />
+                                </div>
+                            </div>
+                            <button
+                                class="w-full md:w-auto font-label-bold text-label-bold py-4 px-8 rounded-lg transition-all duration-300 shadow-lg shadow-primary/20 active:scale-[0.98] backdrop-blur-md border text-on-secondary-container hover:brightness-95 h-[56px]"
+                                id="shorten-btn"
+                                style="
+                                    background: linear-gradient(
+                                        135deg,
+                                        rgb(56, 189, 248) 0%,
+                                        rgb(2, 132, 199) 100%
+                                    );
+                                    border-color: rgba(255, 255, 255, 0.2);
+                                    color: rgb(255, 255, 255);
+                                "
+                            >
+                                Shorten
+                            </button>
+                        </div>
+                        <div
+                            class="opacity-0 translate-y-4 transition-all duration-500 pointer-events-none mt-stack-md"
+                            id="result-container"
+                        >
+                            <div
+                                class="p-stack-sm bg-white/60 border border-white/80 rounded-lg flex items-center justify-between"
+                            >
+                                <div class="flex flex-col">
+                                    <span
+                                        class="text-label-sm font-label-sm text-on-surface-variant"
+                                        id="short-link-label"
+                                        >Your short link</span
+                                    ><span
+                                        class="text-body-md font-body-md font-bold text-primary"
+                                        id="short-link-text"
+                                        >lnk.co/xY7z2</span
+                                    >
+                                </div>
+                                <button
+                                    class="flex items-center gap-2 px-4 py-2 bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold rounded-lg hover:bg-secondary-fixed-dim transition-all active:scale-95"
+                                    id="copy-btn"
+                                >
+                                    <span
+                                        class="material-symbols-outlined text-[18px]"
+                                        >content_copy</span
+                                    ><span class="" id="copy-label">Copy</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- QR Code View -->
+                    <div
+                        class="space-y-stack-sm animate-in fade-in duration-300 hidden"
+                        id="qr-view"
+                    >
+                        <label
+                            class="text-label-bold font-label-bold text-on-surface-variant ml-1"
+                            for="qr-input"
+                            id="qr-input-label"
+                            >Enter URL for QR code...</label
+                        >
+                        <div class="space-y-stack-md">
+                            <input
+                                class="w-full bg-white/50 backdrop-blur-md border-white/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none"
+                                id="qr-input"
+                                placeholder="https://example.com"
+                                type="url"
+                            />
+                            <div
+                                class="flex flex-col items-center justify-center p-stack-lg bg-white/40 rounded-xl border border-white/60"
+                            >
+                                <div
+                                    class="w-48 h-48 bg-surface-container-highest/50 rounded-lg flex items-center justify-center relative overflow-hidden group"
+                                >
+                                    <span
+                                        class="material-symbols-outlined text-outline-variant text-5xl group-hover:scale-110 transition-transform"
+                                        >qr_code_2</span
+                                    >
+                                    <div
+                                        class="absolute inset-0 flex items-center justify-center bg-white/80 opacity-0 transition-opacity"
+                                        id="qr-placeholder-text"
+                                    >
+                                        <span
+                                            class="text-label-sm font-label-sm text-primary"
+                                            id="qr-preview-ready"
+                                            >Preview ready</span
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <button
+                                class="w-full font-label-bold text-label-bold py-4 rounded-lg transition-all duration-300 shadow-lg shadow-primary/20 active:scale-[0.98] backdrop-blur-md border text-on-secondary-container hover:brightness-95"
+                                id="generate-qr-btn"
+                                style="
+                                    background: linear-gradient(
+                                        135deg,
+                                        rgb(56, 189, 248) 0%,
+                                        rgb(2, 132, 199) 100%
+                                    );
+                                    border-color: rgba(255, 255, 255, 0.2);
+                                    color: rgb(255, 255, 255);
+                                "
+                            >
+                                Generate QR Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- Success Toast -->
+        <div
+            class="fixed bottom-10 left-1/2 -translate-x-1/2 glass-card border-tertiary-container/30 px-6 py-4 rounded-xl flex items-center gap-3 opacity-0 translate-y-10 transition-all duration-300 pointer-events-none z-[100]"
+            id="toast"
+        >
+            <span
+                class="material-symbols-outlined text-tertiary"
+                style="font-variation-settings: &quot;FILL&quot; 1"
+                >check_circle</span
+            >
+            <span
+                class="text-label-bold font-label-bold text-on-surface"
+                id="toast-text"
+                >Link shortened successfully!</span
+            >
+        </div>
+        <script>
+            // Language translations
+            const translations = {
+                en: {
+                    headline: "Awali. Shorter links, better starts.",
+                    subheadline:
+                        "Create clean, memorable links and instant QR codes in seconds. Enhance your digital footprint with precision-engineered tools.",
+                    urlLabel: "Paste your long URL here...",
+                    aliasLabel: "Custom Alias (Optional)",
+                    shortenBtn: "Shorten",
+                    qrTab: "QR Code",
+                    urlTab: "Shorten URL",
+                    supportBtn: "Buy me a coffee",
+                    qrInputLabel: "Enter URL for QR code...",
+                    generateQrBtn: "Generate QR Code",
+                    shortLinkName: "Your short link",
+                    copy: "Copy",
+                    uptime: "Uptime",
+                    support: "Support",
+                    cdns: "CDNs",
+                    toastSuccess: "Link shortened successfully!",
+                    toastQrSuccess: "QR Code generated!",
+                    creating: "Creating...",
+                    generating: "Generating...",
+                    previewReady: "Preview ready",
+                },
+                id: {
+                    headline:
+                        "Awali. Link lebih singkat, awal yang lebih baik.",
+                    subheadline:
+                        "Buat tautan bersih, mudah diingat, dan kode QR instan dalam hitungan detik. Tingkatkan jejak digital Anda dengan alat yang presisi.",
+                    urlLabel: "Tempel URL panjang Anda di sini...",
+                    aliasLabel: "Alias Kustom (Opsional)",
+                    shortenBtn: "Perpendek",
+                    qrTab: "Kode QR",
+                    urlTab: "Perpendek URL",
+                    supportBtn: "Dukung saya",
+                    qrInputLabel: "Masukkan URL untuk kode QR...",
+                    generateQrBtn: "Buat Kode QR",
+                    shortLinkName: "Tautan pendek Anda",
+                    copy: "Salin",
+                    uptime: "Aktif",
+                    support: "Dukungan",
+                    cdns: "CDN",
+                    toastSuccess: "Tautan berhasil diperpendek!",
+                    toastQrSuccess: "Kode QR berhasil dibuat!",
+                    creating: "Membuat...",
+                    generating: "Memproses...",
+                    previewReady: "Pratinjau siap",
+                },
+            };
+
+            let currentLang = "en";
+
+            function setLanguage(lang) {
+                if (lang === currentLang) return;
+                currentLang = lang;
+
+                // Toggle button styles
+                const enBtn = document.getElementById("lang-en");
+                const idBtn = document.getElementById("lang-id");
+                if (lang === "en") {
+                    enBtn.classList.add("bg-primary", "text-white");
+                    enBtn.classList.remove(
+                        "text-on-surface",
+                        "hover:bg-white/40",
+                    );
+                    idBtn.classList.remove("bg-primary", "text-white");
+                    idBtn.classList.add("text-on-surface", "hover:bg-white/40");
+                } else {
+                    idBtn.classList.add("bg-primary", "text-white");
+                    idBtn.classList.remove(
+                        "text-on-surface",
+                        "hover:bg-white/40",
+                    );
+                    enBtn.classList.remove("bg-primary", "text-white");
+                    enBtn.classList.add("text-on-surface", "hover:bg-white/40");
+                }
+
+                // Apply smooth transition to content
+                const transElements = [
+                    "hero-content",
+                    "url-view",
+                    "qr-view",
+                    "tab-container-new",
+                ];
+                transElements.forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.style.opacity = "0";
+                        el.style.transform = "translateY(10px)";
+                    }
+                });
+
+                setTimeout(() => {
+                    const t = translations[lang];
+
+                    // Text content updates
+                    document.getElementById("main-headline").innerText =
+                        t.headline;
+                    document.getElementById("main-subheadline").innerText =
+                        t.subheadline;
+                    document.getElementById("url-input-label").innerText =
+                        t.urlLabel;
+                    document.getElementById("alias-input-label").innerText =
+                        t.aliasLabel;
+                    document.getElementById("shorten-btn").innerText =
+                        t.shortenBtn;
+                    document.getElementById("tab-url").innerText = t.urlTab;
+                    document.getElementById("tab-qr").innerText = t.qrTab;
+                    document.getElementById("support-text").innerText =
+                        t.supportBtn;
+                    document.getElementById("qr-input-label").innerText =
+                        t.qrInputLabel;
+                    document.getElementById("generate-qr-btn").innerText =
+                        t.generateQrBtn;
+                    document.getElementById("short-link-label").innerText =
+                        t.shortLinkName;
+                    document.getElementById("copy-label").innerText = t.copy;
+                    document.getElementById("uptime-label").innerText =
+                        t.uptime;
+                    document.getElementById("support-label").innerText =
+                        t.support;
+                    document.getElementById("cdns-label").innerText = t.cdns;
+                    document.getElementById("qr-preview-ready").innerText =
+                        t.previewReady;
+
+                    // Update placeholders
+                    document.getElementById("url-input").placeholder =
+                        lang === "en"
+                            ? "https://example.com/very-long-and-complex-path"
+                            : "https://contoh.com/jalur-yang-sangat-panjang";
+                    document.getElementById("alias-input").placeholder =
+                        lang === "en" ? "my-custom-link" : "tautan-kustom-saya";
+
+                    // Fade back in
+                    transElements.forEach((id) => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.style.opacity = "1";
+                            el.style.transform = "translateY(0)";
+                            el.classList.add("transition-all", "duration-500");
+                        }
+                    });
+                }, 300);
+            }
+
+            // Header Scroll Logic
+            const header = document.getElementById("main-header");
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 20) {
+                    header.classList.add("scrolled", "shadow-sm", "py-4");
+                    header.classList.remove("bg-transparent", "py-stack-sm");
+                } else {
+                    header.classList.remove("scrolled", "shadow-sm", "py-4");
+                    header.classList.add("bg-transparent", "py-stack-sm");
+                }
+            });
+
+            const shortenBtn = document.getElementById("shorten-btn");
+            const resultContainer = document.getElementById("result-container");
+            const copyBtn = document.getElementById("copy-btn");
+            const copyLabel = document.getElementById("copy-label");
+            const urlInput = document.getElementById("url-input");
+            const toast = document.getElementById("toast");
+            const toastText = document.getElementById("toast-text");
+
+            const tabUrl = document.getElementById("tab-url");
+            const tabQr = document.getElementById("tab-qr");
+            const urlView = document.getElementById("url-view");
+            const qrView = document.getElementById("qr-view");
+
+            function switchTab(type) {
+                if (type === "url") {
+                    tabUrl.classList.add("border-primary", "text-primary");
+                    tabUrl.classList.remove(
+                        "border-transparent",
+                        "text-on-surface-variant",
+                    );
+                    tabQr.classList.remove("border-primary", "text-primary");
+                    tabQr.classList.add(
+                        "border-transparent",
+                        "text-on-surface-variant",
+                    );
+                    urlView.classList.remove("hidden");
+                    urlView.classList.add("block");
+                    qrView.classList.add("hidden");
+                    qrView.classList.remove("block");
+                } else {
+                    tabQr.classList.add("border-primary", "text-primary");
+                    tabQr.classList.remove(
+                        "border-transparent",
+                        "text-on-surface-variant",
+                    );
+                    tabUrl.classList.remove("border-primary", "text-primary");
+                    tabUrl.classList.add(
+                        "border-transparent",
+                        "text-on-surface-variant",
+                    );
+                    qrView.classList.remove("hidden");
+                    qrView.classList.add("block");
+                    urlView.classList.add("hidden");
+                    urlView.classList.remove("block");
+                }
+            }
+
+            function showToast(message) {
+                toastText.innerText = message;
+                toast.classList.remove(
+                    "opacity-0",
+                    "translate-y-10",
+                    "pointer-events-none",
+                );
+                toast.classList.add("opacity-100", "translate-y-0");
+                setTimeout(() => {
+                    toast.classList.add(
+                        "opacity-0",
+                        "translate-y-10",
+                        "pointer-events-none",
+                    );
+                    toast.classList.remove("opacity-100", "translate-y-0");
+                }, 3000);
+            }
+
+            shortenBtn.addEventListener("click", () => {
+                if (urlInput.value.trim() === "") {
+                    urlInput.classList.add("border-error");
+                    setTimeout(
+                        () => urlInput.classList.remove("border-error"),
+                        1000,
+                    );
+                    return;
+                }
+                shortenBtn.innerText = translations[currentLang].creating;
+                shortenBtn.disabled = true;
+                setTimeout(() => {
+                    shortenBtn.innerText = translations[currentLang].shortenBtn;
+                    shortenBtn.disabled = false;
+                    resultContainer.classList.remove(
+                        "opacity-0",
+                        "translate-y-4",
+                        "pointer-events-none",
+                    );
+                    resultContainer.classList.add(
+                        "opacity-100",
+                        "translate-y-0",
+                    );
+                    showToast(translations[currentLang].toastSuccess);
+                }, 800);
+            });
+
+            document
+                .getElementById("generate-qr-btn")
+                .addEventListener("click", () => {
+                    const qrInput = document.getElementById("qr-input");
+                    if (qrInput.value.trim() === "") {
+                        qrInput.classList.add("border-error");
+                        setTimeout(
+                            () => qrInput.classList.remove("border-error"),
+                            1000,
+                        );
+                        return;
+                    }
+                    const btn = document.getElementById("generate-qr-btn");
+                    btn.innerText = translations[currentLang].generating;
+                    setTimeout(() => {
+                        btn.innerText = translations[currentLang].generateQrBtn;
+                        document
+                            .getElementById("qr-placeholder-text")
+                            .classList.remove("opacity-0");
+                        showToast(translations[currentLang].toastQrSuccess);
+                    }, 800);
+                });
+
+            copyBtn.addEventListener("click", () => {
+                const text =
+                    document.getElementById("short-link-text").innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalLabel = copyLabel.innerText;
+                    const originalBg = copyBtn.className;
+                    copyLabel.innerText =
+                        currentLang === "en" ? "Copied!" : "Disalin!";
+                    copyBtn.classList.remove("bg-secondary-fixed");
+                    copyBtn.classList.add(
+                        "bg-tertiary-container",
+                        "text-on-tertiary-container",
+                    );
+                    setTimeout(() => {
+                        copyLabel.innerText = originalLabel;
+                        copyBtn.className = originalBg;
+                    }, 2000);
+                });
+            });
+        </script>
+    </body>
+</html>
