@@ -10,7 +10,11 @@ import { ToolCard } from "./components/ToolCard";
 function App() {
     const [lang, setLang] = useState<"en" | "id">("en");
     const [isLangExiting, setIsLangExiting] = useState(false);
-    const [toast, setToast] = useState({ visible: false, message: "" });
+    const [toast, setToast] = useState({
+        visible: false,
+        message: "",
+        isSuccess: true,
+    });
     const t = translations[lang] as typeof translations.en;
 
     useEffect(() => {
@@ -72,9 +76,15 @@ function App() {
     };
 
     const showToast = (message: string) => {
-        setToast({ visible: true, message });
+        let isSuccess = true;
+
+        if (message !== t.toastSuccess && message !== t.toastQrSuccess) {
+            isSuccess = false;
+        }
+
+        setToast({ visible: true, message, isSuccess });
         window.setTimeout(() => {
-            setToast({ visible: false, message: "" });
+            setToast({ visible: false, message: "", isSuccess: true });
         }, 3000);
     };
 
@@ -93,7 +103,11 @@ function App() {
                 <ToolCard t={t} lang={lang} showToast={showToast} />
             </main>
 
-            <Toast visible={toast.visible} message={toast.message} />
+            <Toast
+                visible={toast.visible}
+                message={toast.message}
+                isSuccess={toast.isSuccess}
+            />
         </div>
     );
 }

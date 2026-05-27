@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { placeholders, type Lang, type Translation } from "../data/content";
+import { shortenUrl } from "../apis/shortenApi";
 
 interface ToolCardProps {
     t: Translation;
@@ -12,6 +13,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
     const [aliasInput, setAliasInput] = useState("");
     const [urlError, setUrlError] = useState(false);
     const [resultVisible, setResultVisible] = useState(false);
+    const [shortenUrlResult, setShortenUrlResult] = useState("");
     const [qrResultVisible, setQrResultVisible] = useState(false);
     const [activeResult, setActiveResult] = useState<"url" | "qr" | null>(null);
     const [copyLabel, setCopyLabel] = useState<string>(t.copy);
@@ -21,7 +23,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
     const urlPlaceholder = placeholders[lang].url;
     const aliasPlaceholder = placeholders[lang].alias;
 
-    const handleShorten = () => {
+    const handleShorten = async () => {
         if (urlInput.trim() === "") {
             setUrlError(true);
             setTimeout(() => setUrlError(false), 1000);
@@ -29,13 +31,20 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
         }
 
         setShortenLoading(true);
-        setTimeout(() => {
+
+        try {
+            const response = await shortenUrl(urlInput, aliasInput);
             setShortenLoading(false);
+
+            setShortenUrlResult(response.data.urlCode);
             setResultVisible(true);
             setActiveResult("url");
             setQrResultVisible(false);
             showToast(t.toastSuccess);
-        }, 800);
+        } catch (error) {
+            setShortenLoading(false);
+            showToast("An error occurred. Please try again.");
+        }
     };
 
     const handleGenerateQr = () => {
@@ -57,7 +66,8 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
 
     const handleCopy = async () => {
         try {
-            await navigator.clipboard.writeText("https://lnk.co/xY7z2");
+            const fullUrl = window.location.host + "/" + shortenUrlResult;
+            await navigator.clipboard.writeText(fullUrl);
             setCopyLabel("Copied");
             window.setTimeout(() => setCopyLabel(t.copy), 1200);
         } catch {
@@ -178,7 +188,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                                 className="text-body-md font-body-md font-bold text-primary"
                                 id="short-link-text"
                             >
-                                lnk.co/xY7z2
+                                {`${window.location.host}/${shortenUrlResult}`}
                             </span>
                         </div>
                         <button

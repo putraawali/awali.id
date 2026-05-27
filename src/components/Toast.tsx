@@ -1,9 +1,10 @@
 interface ToastProps {
     visible: boolean;
     message: string;
+    isSuccess: boolean;
 }
 
-export function Toast({ visible, message }: ToastProps) {
+export function Toast({ visible, message, isSuccess }: ToastProps) {
     return (
         <div
             className={`fixed bottom-10 left-1/2 -translate-x-1/2 glass-card border-tertiary-container/30 px-6 py-4 rounded-xl flex items-center gap-3 transition-all duration-300 z-[100] ${
@@ -17,7 +18,7 @@ export function Toast({ visible, message }: ToastProps) {
                 className="material-symbols-outlined text-tertiary"
                 style={{ fontVariationSettings: '"FILL" 1' }}
             >
-                check_circle
+                {isSuccess ? "check_circle" : "error"}
             </span>
             <span
                 className="text-label-bold font-label-bold text-on-surface"

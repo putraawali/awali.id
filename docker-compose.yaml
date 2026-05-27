@@ -1,0 +1,12 @@
+services:
+    frontend:
+        build: .
+        container_name: awali.id
+        ports:
+            - "${APP_PORT}:80"
+        networks:
+            - sret-network
+
+networks:
+    sret-network:
+        external: true
