@@ -71,6 +71,12 @@ header.scrolled .text-on-surface {
         transform 0.3s ease;
 }
 
+.lang-exit {
+    opacity: 0;
+    transform: translateY(70px);
+    pointer-events: none;
+}
+
 body {
     margin: 0;
     font-family: "Plus Jakarta Sans", system-ui, sans-serif;
