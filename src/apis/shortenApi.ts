@@ -14,7 +14,7 @@ export async function shortenUrl(
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ longUrl, alias }),
+        body: JSON.stringify({ longUrl, slug: alias }),
     });
 
     const data = await response.json();

@@ -65,15 +65,39 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
     };
 
     const handleCopy = async () => {
+        const fullUrl = `${window.location.origin}/${shortenUrlResult}`;
+
         try {
-            const fullUrl = window.location.host + "/" + shortenUrlResult;
-            await navigator.clipboard.writeText(fullUrl);
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(fullUrl);
+            } else {
+                fallbackCopy(fullUrl);
+            }
+
             setCopyLabel("Copied");
-            window.setTimeout(() => setCopyLabel(t.copy), 1200);
         } catch {
             setCopyLabel("Copied");
-            window.setTimeout(() => setCopyLabel(t.copy), 1200);
         }
+
+        window.setTimeout(() => setCopyLabel(t.copy), 1200);
+    };
+
+    const fallbackCopy = (text: string) => {
+        const textarea = document.createElement("textarea");
+
+        textarea.value = text;
+
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+
+        document.body.appendChild(textarea);
+
+        textarea.focus();
+        textarea.select();
+
+        document.execCommand("copy");
+
+        document.body.removeChild(textarea);
     };
 
     return (
@@ -177,7 +201,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                         }`}
                         id="link-result-ui"
                     >
-                        <div className="flex flex-col">
+                        <div className="flex flex-col min-w-0 flex-1">
                             <span
                                 className="text-label-sm font-label-sm text-on-surface-variant"
                                 id="short-link-label"
@@ -185,10 +209,16 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                                 {t.shortLinkName}
                             </span>
                             <span
-                                className="text-body-md font-body-md font-bold text-primary"
+                                className="text-body-md font-body-md font-bold text-primary flex items-center min-w-0 max-w-[180px] sm:max-w-[240px]"
                                 id="short-link-text"
                             >
-                                {`${window.location.host}/${shortenUrlResult}`}
+                                <span className="font-normal opacity-70 bg-surface-container/50 px-1 rounded mr-0.5 flex-shrink-0">{`awali.id/`}</span>
+                                <span
+                                    className="font-extrabold truncate"
+                                    title={shortenUrlResult}
+                                >
+                                    {shortenUrlResult}
+                                </span>
                             </span>
                         </div>
                         <button

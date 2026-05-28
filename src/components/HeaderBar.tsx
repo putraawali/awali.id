@@ -1,4 +1,5 @@
 import type { Lang, Translation } from "../data/content";
+import AwaliLogo from "../assets/long_awali_removed_bg.png";
 
 interface HeaderBarProps {
     lang: Lang;
@@ -32,7 +33,11 @@ export function HeaderBar({ lang, onChangeLang, t }: HeaderBarProps) {
             className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-container-padding-mb md:px-container-padding-dt border-b border-transparent bg-transparent py-stack-sm"
         >
             <div className="text-headline-md font-headline-md font-extrabold tracking-tighter text-on-surface">
-                Awali.
+                <img
+                    src={AwaliLogo}
+                    alt="Awali Logo"
+                    className="block h-12 w-auto object-contain"
+                />
             </div>
             <div className="flex items-center gap-3">
                 <div className="glass-card flex p-1 rounded-full items-center text-label-sm font-label-bold overflow-hidden shadow-sm">

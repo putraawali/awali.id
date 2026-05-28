@@ -18,7 +18,6 @@ export default defineConfig({
                 changeOrigin: true,
 
                 rewrite: (path) => {
-                    console.log(path, "<<<");
                     return `/api/v1/link${path}`;
                 },
             },
