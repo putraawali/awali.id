@@ -18,7 +18,6 @@ export async function shortenUrl(
     });
 
     const data = await response.json();
-    console.log("API Response:", data);
 
     return {
         message: data.message,
