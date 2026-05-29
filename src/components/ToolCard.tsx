@@ -119,7 +119,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                     </label>
                     <div className="relative group">
                         <input
-                            className={`w-full bg-white/50 backdrop-blur-md border-white/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none ${
+                            className={`w-full bg-white/50 dark:bg-slate-950/40 backdrop-blur-md border-white/60 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 dark:text-white dark:placeholder-slate-400/80 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none ${
                                 urlError ? "border-error" : ""
                             }`}
                             id="url-input"
@@ -142,7 +142,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                     </label>
                     <div className="relative group">
                         <input
-                            className="w-full bg-white/50 backdrop-blur-md border-white/60 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none"
+                            className="w-full bg-white/50 dark:bg-slate-950/40 backdrop-blur-md border-white/60 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 dark:text-white dark:placeholder-slate-400/80 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none"
                             id="alias-input"
                             placeholder={aliasPlaceholder}
                             type="text"
@@ -198,7 +198,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                     id="result-container"
                 >
                     <div
-                        className={`p-stack-sm bg-white/60 border border-white/80 rounded-lg flex items-center justify-between ${
+                        className={`p-stack-sm bg-white/60 dark:bg-slate-900/60 border border-white/80 dark:border-white/10 rounded-lg flex items-center justify-between ${
                             activeResult === "url" ? "block" : "hidden"
                         }`}
                         id="link-result-ui"
@@ -236,7 +236,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                         </button>
                     </div>
                     <div
-                        className={`flex flex-col items-center justify-center p-stack-lg bg-white/40 rounded-xl border border-white/60 mt-4 ${
+                        className={`flex flex-col items-center justify-center p-stack-lg bg-white/40 dark:bg-slate-900/40 rounded-xl border border-white/60 dark:border-white/10 mt-4 ${
                             activeResult === "qr" ? "flex" : "hidden"
                         }`}
                         id="qr-result-ui"
@@ -246,7 +246,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                                 qr_code_2
                             </span>
                             <div
-                                className="absolute inset-0 flex items-center justify-center bg-white/80"
+                                className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-slate-950/80"
                                 id="qr-placeholder-text"
                             >
                                 <span

@@ -10,12 +10,29 @@ import { ToolCard } from "./components/ToolCard";
 function App() {
     const [lang, setLang] = useState<"en" | "id">("en");
     const [isLangExiting, setIsLangExiting] = useState(false);
+    const [theme, setTheme] = useState<"light" | "dark">(
+        () => (localStorage.getItem("theme") as "light" | "dark") || "light"
+    );
     const [toast, setToast] = useState({
         visible: false,
         message: "",
         isSuccess: true,
     });
     const t = translations[lang] as typeof translations.en;
+
+    useEffect(() => {
+        const root = window.document.documentElement;
+        if (theme === "dark") {
+            root.classList.add("dark");
+        } else {
+            root.classList.remove("dark");
+        }
+    }, [theme]);
+
+    const handleThemeChange = (newTheme: "light" | "dark") => {
+        setTheme(newTheme);
+        localStorage.setItem("theme", newTheme);
+    };
 
     useEffect(() => {
         const header = document.getElementById("main-header");
@@ -91,11 +108,16 @@ function App() {
     return (
         <div className="relative z-10 min-h-[100vh] overflow-x-hidden font-sans">
             <BackgroundWave />
-            <HeaderBar lang={lang} onChangeLang={handleLangChange} t={t} />
+            <HeaderBar
+                lang={lang}
+                onChangeLang={handleLangChange}
+                t={t}
+                theme={theme}
+                onChangeTheme={handleThemeChange}
+            />
             <main
-                className={`min-h-screen flex flex-col md:flex-row pt-20 relative z-10 lang-transition ${
-                    isLangExiting ? "lang-exit" : ""
-                }`}
+                className={`min-h-screen flex flex-col md:flex-row pt-20 relative z-10 lang-transition ${isLangExiting ? "lang-exit" : ""
+                    }`}
                 id="main-content"
             >
                 <HeroSection t={t} />

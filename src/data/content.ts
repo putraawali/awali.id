@@ -24,6 +24,8 @@ export const translations = {
         creating: "Creating...",
         generating: "Generating...",
         previewReady: "Preview ready",
+        themeLight: "Light Mode",
+        themeDark: "Dark Mode",
     },
     id: {
         headline: "Awali. Link lebih singkat, awal yang lebih baik.",
@@ -47,6 +49,8 @@ export const translations = {
         creating: "Membuat...",
         generating: "Memproses...",
         previewReady: "Pratinjau siap",
+        themeLight: "Mode Terang",
+        themeDark: "Mode Gelap",
     },
 } as const;
 

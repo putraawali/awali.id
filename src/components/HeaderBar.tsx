@@ -1,10 +1,13 @@
 import type { Lang, Translation } from "../data/content";
-import AwaliLogo from "../assets/long_awali_removed_bg.png";
+import AwaliLogoLightMode from "../assets/long_awali_removed_bg.png";
+import AwaliLogoDarkMode from "../assets/long_awali_dark_mode_removed_bg_ractangle.png";
 
 interface HeaderBarProps {
     lang: Lang;
     onChangeLang: (lang: Lang) => void;
     t: Translation;
+    theme: "light" | "dark";
+    onChangeTheme: (theme: "light" | "dark") => void;
 }
 
 const supportButtonClass = [
@@ -26,7 +29,25 @@ const supportButtonClass = [
     "shadow-sm",
 ].join(" ");
 
-export function HeaderBar({ lang, onChangeLang, t }: HeaderBarProps) {
+export function HeaderBar({
+    lang,
+    onChangeLang,
+    t,
+    theme,
+    onChangeTheme,
+}: HeaderBarProps) {
+    const cycleTheme = () => {
+        onChangeTheme(theme === "light" ? "dark" : "light");
+    };
+
+    const getThemeIcon = () => {
+        return theme === "light" ? "light_mode" : "dark_mode";
+    };
+
+    const getThemeTitle = () => {
+        return theme === "light" ? t.themeLight : t.themeDark;
+    };
+
     return (
         <header
             id="main-header"
@@ -34,9 +55,15 @@ export function HeaderBar({ lang, onChangeLang, t }: HeaderBarProps) {
         >
             <div className="text-headline-md font-headline-md font-extrabold tracking-tighter text-on-surface">
                 <img
-                    src={AwaliLogo}
+                    src={AwaliLogoLightMode}
                     alt="Awali Logo"
-                    className="block h-12 w-auto object-contain"
+                    className="block dark:hidden h-12 w-auto object-contain"
+                />
+
+                <img
+                    src={AwaliLogoDarkMode}
+                    alt="Awali Logo"
+                    className="hidden dark:block h-12 w-auto object-contain"
                 />
             </div>
             <div className="flex items-center gap-3">
@@ -64,6 +91,17 @@ export function HeaderBar({ lang, onChangeLang, t }: HeaderBarProps) {
                         ID
                     </button>
                 </div>
+                <button
+                    type="button"
+                    onClick={cycleTheme}
+                    className="glass-card flex items-center justify-center w-10 h-10 rounded-full text-on-surface hover:bg-white/40 dark:hover:bg-white/10 active:scale-95 transition-all duration-300 shadow-sm relative group"
+                    title={getThemeTitle()}
+                    id="theme-toggle-btn"
+                >
+                    <span className="material-symbols-outlined text-[20px] theme-icon-transition">
+                        {getThemeIcon()}
+                    </span>
+                </button>
                 <a
                     className={supportButtonClass}
                     href="https://saweria.co/putraawali"
