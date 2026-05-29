@@ -43,9 +43,17 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
             showToast(t.toastSuccess);
             setAliasInput("");
             setUrlInput("");
-        } catch (error) {
+        } catch (error: any) {
             setShortenLoading(false);
-            showToast("An error occurred. Please try again.");
+            let toastMessage = error.message;
+
+            if (toastMessage.toLowerCase().includes("too many requests")) {
+                toastMessage = "Too many requests. Please try again later.";
+                setUrlError(true);
+                setTimeout(() => setUrlError(false), 1000);
+            }
+
+            showToast(toastMessage);
         }
     };
 
@@ -191,8 +199,8 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                 </div>
                 <div
                     className={`opacity-0 translate-y-4 transition-all duration-500 pointer-events-none mt-stack-md ${resultVisible || qrResultVisible
-                            ? "opacity-100 translate-y-0 pointer-events-auto"
-                            : ""
+                        ? "opacity-100 translate-y-0 pointer-events-auto"
+                        : ""
                         }`}
                     id="result-container"
                 >

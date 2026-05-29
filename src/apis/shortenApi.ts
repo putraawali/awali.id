@@ -17,7 +17,11 @@ export async function shortenUrl(
         body: JSON.stringify({ longUrl, slug: alias }),
     });
 
-    const data = await response.json();
+    const data: ApiResponse<ShortenResponse> = await response.json();
+
+    if (data.message === "error") {
+        throw new Error(data.error?.message);
+    }
 
     return {
         message: data.message,

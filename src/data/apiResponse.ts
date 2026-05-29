@@ -1,5 +1,5 @@
 interface ApiResponse<T> {
-    message: string;
+    message: "success" | "error";
     data: T;
     error?: ApiErrorResponse;
 }
