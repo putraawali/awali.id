@@ -119,9 +119,8 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                     </label>
                     <div className="relative group">
                         <input
-                            className={`w-full bg-white/50 dark:bg-slate-950/40 backdrop-blur-md border-white/60 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 dark:text-white dark:placeholder-slate-400/80 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none ${
-                                urlError ? "border-error" : ""
-                            }`}
+                            className={`w-full bg-white/50 dark:bg-slate-950/40 backdrop-blur-md border-white/60 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 dark:text-white dark:placeholder-slate-400/80 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none ${urlError ? "border-error" : ""
+                                }`}
                             id="url-input"
                             placeholder={urlPlaceholder}
                             type="url"
@@ -147,9 +146,10 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                             placeholder={aliasPlaceholder}
                             type="text"
                             value={aliasInput}
-                            onChange={(event) =>
-                                setAliasInput(event.target.value)
-                            }
+                            onChange={(event) => {
+                                const filtered = event.target.value.replace(/[^a-zA-Z0-9_-]/g, "");
+                                setAliasInput(filtered);
+                            }}
                         />
                     </div>
                 </div>
@@ -178,7 +178,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                             }}
                             onClick={handleGenerateQr}
                             disabled={true}
-                            // disabled={generateLoading}
+                        // disabled={generateLoading}
                         >
                             {generateLoading ? t.generating : t.generateQrBtn}
                         </button>
@@ -190,17 +190,15 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                     </div>
                 </div>
                 <div
-                    className={`opacity-0 translate-y-4 transition-all duration-500 pointer-events-none mt-stack-md ${
-                        resultVisible || qrResultVisible
+                    className={`opacity-0 translate-y-4 transition-all duration-500 pointer-events-none mt-stack-md ${resultVisible || qrResultVisible
                             ? "opacity-100 translate-y-0 pointer-events-auto"
                             : ""
-                    }`}
+                        }`}
                     id="result-container"
                 >
                     <div
-                        className={`p-stack-sm bg-white/60 dark:bg-slate-900/60 border border-white/80 dark:border-white/10 rounded-lg flex items-center justify-between ${
-                            activeResult === "url" ? "block" : "hidden"
-                        }`}
+                        className={`p-stack-sm bg-white/60 dark:bg-slate-900/60 border border-white/80 dark:border-white/10 rounded-lg flex items-center justify-between ${activeResult === "url" ? "block" : "hidden"
+                            }`}
                         id="link-result-ui"
                     >
                         <div className="flex flex-col min-w-0 flex-1">
@@ -236,9 +234,8 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                         </button>
                     </div>
                     <div
-                        className={`flex flex-col items-center justify-center p-stack-lg bg-white/40 dark:bg-slate-900/40 rounded-xl border border-white/60 dark:border-white/10 mt-4 ${
-                            activeResult === "qr" ? "flex" : "hidden"
-                        }`}
+                        className={`flex flex-col items-center justify-center p-stack-lg bg-white/40 dark:bg-slate-900/40 rounded-xl border border-white/60 dark:border-white/10 mt-4 ${activeResult === "qr" ? "flex" : "hidden"
+                            }`}
                         id="qr-result-ui"
                     >
                         <div className="w-48 h-48 bg-surface-container-highest/50 rounded-lg flex items-center justify-center relative overflow-hidden group">
