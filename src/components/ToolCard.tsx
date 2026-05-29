@@ -41,6 +41,8 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
             setActiveResult("url");
             setQrResultVisible(false);
             showToast(t.toastSuccess);
+            setAliasInput("");
+            setUrlInput("");
         } catch (error) {
             setShortenLoading(false);
             showToast("An error occurred. Please try again.");
