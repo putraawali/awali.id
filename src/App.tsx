@@ -4,6 +4,7 @@ import { HeaderBar } from "./components/HeaderBar";
 import { translations } from "./data/content";
 import { Toast } from "./components/Toast";
 import { BackgroundWave } from "./components/BackgroundWave";
+import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/HeroSection";
 import { ToolCard } from "./components/ToolCard";
 
@@ -112,7 +113,7 @@ function App() {
     };
 
     return (
-        <div className="relative z-10 min-h-[100vh] overflow-x-hidden font-sans">
+        <div className="relative z-10 min-h-[100vh] overflow-x-hidden font-sans flex flex-col">
             <BackgroundWave />
             <HeaderBar
                 lang={lang}
@@ -122,7 +123,7 @@ function App() {
                 onChangeTheme={handleThemeChange}
             />
             <main
-                className={`min-h-screen flex flex-col md:flex-row pt-20 relative z-10 lang-transition ${isLangExiting ? "lang-exit" : ""
+                className={`flex-1 flex flex-col md:flex-row pt-20 relative z-10 lang-transition ${isLangExiting ? "lang-exit" : ""
                     }`}
                 id="main-content"
             >
@@ -130,6 +131,7 @@ function App() {
 
                 <ToolCard t={t} lang={lang} showToast={showToast} />
             </main>
+            <Footer />
 
             <Toast
                 visible={toast.visible}
