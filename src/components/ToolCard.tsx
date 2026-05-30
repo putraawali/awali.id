@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { placeholders, type Lang, type Translation } from "../data/content";
 import { shortenUrl } from "../apis/shortenApi";
-import QrCode, { type QrCodeHandle } from "./QrCode";
+import { LinkResultPanel } from "./LinkResultPanel";
+import { QrResultPanel } from "./QrResultPanel";
+import { ShortenForm } from "./ShortenForm";
+import type { QrCodeHandle } from "./QrCode";
 
 interface ToolCardProps {
     t: Translation;
@@ -27,8 +30,6 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
     const fullShortUrl = shortenUrlResult
         ? `${window.location.origin}/${shortenUrlResult}`
         : "";
-    const urlInputErrorClass =
-        "!border-error !bg-error-container/25 !ring-4 !ring-error/25 dark:!bg-error/10 dark:!ring-error/30";
 
     const getErrorMessage = (error: unknown) =>
         error instanceof Error ? error.message : "Something went wrong.";
@@ -184,65 +185,18 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                 className="glass-card w-full max-w-lg p-stack-md md:p-stack-lg rounded-xl flex flex-col relative z-10 transition-all duration-500 hover:shadow-2xl space-y-4"
                 id="tool-card"
             >
-                <div className="space-y-stack-sm">
-                    <label
-                        className="text-label-bold font-label-bold text-on-surface-variant ml-1"
-                        htmlFor="url-input"
-                        id="url-input-label"
-                    >
-                        {t.urlLabel}
-                    </label>
-                    <div className="relative group">
-                        <input
-                            className={`w-full bg-white/50 dark:bg-slate-950/40 backdrop-blur-md border-white/60 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 dark:text-white dark:placeholder-slate-400/80 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none ${urlError ? urlInputErrorClass : ""
-                                }`}
-                            id="url-input"
-                            placeholder={urlPlaceholder}
-                            type="url"
-                            value={urlInput}
-                            onChange={(event) =>
-                                setUrlInput(event.target.value)
-                            }
-                        />
-                    </div>
-                </div>
-                <div className="space-y-stack-sm">
-                    <label
-                        className="text-label-bold font-label-bold text-on-surface-variant ml-1"
-                        htmlFor="alias-input"
-                        id="alias-input-label"
-                    >
-                        {t.aliasLabel}
-                    </label>
-                    <div className="relative group">
-                        <input
-                            className="w-full bg-white/50 dark:bg-slate-950/40 backdrop-blur-md border-white/60 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 dark:text-white dark:placeholder-slate-400/80 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none"
-                            id="alias-input"
-                            placeholder={aliasPlaceholder}
-                            type="text"
-                            value={aliasInput}
-                            onChange={(event) => {
-                                const filtered = event.target.value.replace(/[^a-zA-Z0-9_-]/g, "");
-                                setAliasInput(filtered);
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                    <button
-                        className="flex-1 font-label-bold text-label-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-primary/20 active:scale-[0.98] backdrop-blur-md border text-white hover:brightness-95"
-                        id="shorten-btn"
-                        style={{
-                            background:
-                                "linear-gradient(135deg, rgb(56, 189, 248) 0%, rgb(2, 132, 199) 100%)",
-                            borderColor: "rgba(255, 255, 255, 0.2)",
-                        }}
-                        onClick={handleShorten}
-                        disabled={shortenLoading}
-                    >
-                        {shortenLoading ? t.creating : t.shortenBtn}
-                    </button>
-                </div>
+                <ShortenForm
+                    t={t}
+                    urlInput={urlInput}
+                    aliasInput={aliasInput}
+                    urlPlaceholder={urlPlaceholder}
+                    aliasPlaceholder={aliasPlaceholder}
+                    urlError={urlError}
+                    isLoading={shortenLoading}
+                    onUrlChange={setUrlInput}
+                    onAliasChange={setAliasInput}
+                    onShorten={handleShorten}
+                />
                 <div
                     className={`opacity-0 translate-y-4 transition-all duration-500 pointer-events-none mt-stack-md ${resultVisible || qrResultVisible
                         ? "opacity-100 translate-y-0 pointer-events-auto"
@@ -250,109 +204,25 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                         }`}
                     id="result-container"
                 >
-                    <div
-                        className={`result-panel-enter p-stack-sm bg-white/60 dark:bg-slate-900/60 border border-white/80 dark:border-white/10 rounded-lg flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${activeResult === "url" ? "flex" : "hidden"
-                            }`}
-                        id="link-result-ui"
-                    >
-                        <div className="flex flex-col min-w-0 flex-1">
-                            <span
-                                className="text-label-sm font-label-sm text-on-surface-variant"
-                                id="short-link-label"
-                            >
-                                {t.shortLinkName}
-                            </span>
-                            <span
-                                className="text-body-md font-body-md font-bold text-primary flex items-center min-w-0 max-w-[180px] sm:max-w-[240px]"
-                                id="short-link-text"
-                            >
-                                <span className="font-normal opacity-70 bg-surface-container/50 px-1 rounded mr-0.5 flex-shrink-0">{`awali.id/`}</span>
-                                <span
-                                    className="font-extrabold truncate"
-                                    title={shortenUrlResult}
-                                >
-                                    {shortenUrlResult}
-                                </span>
-                            </span>
-                        </div>
-                        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
-                            <button
-                                type="button"
-                                className="inline-flex w-full items-center justify-center gap-2 px-4 py-2 bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold rounded-lg hover:bg-secondary-fixed-dim transition-all active:scale-95 sm:w-auto"
-                                id="copy-btn"
-                                onClick={handleCopy}
-                            >
-                                <span className="material-symbols-outlined text-[18px]">
-                                    content_copy
-                                </span>
-                                <span id="copy-label">{copyLabel}</span>
-                            </button>
-                            <button
-                                type="button"
-                                className="inline-flex w-full items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary font-label-bold text-label-bold rounded-lg hover:brightness-95 transition-all active:scale-95 sm:w-auto"
-                                id="show-qr-btn"
-                                onClick={handleShowQr}
-                            >
-                                <span className="material-symbols-outlined text-[18px]">
-                                    qr_code_2
-                                </span>
-                                <span>{t.showQr}</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        className={`result-panel-enter flex flex-col items-center justify-center p-stack-lg bg-white/40 dark:bg-slate-900/40 rounded-xl border border-white/60 dark:border-white/10 mt-4 ${activeResult === "qr" ? "flex" : "hidden"
-                            }`}
-                        id="qr-result-ui"
+                    <LinkResultPanel
+                        t={t}
+                        shortCode={shortenUrlResult}
+                        copyLabel={copyLabel}
+                        isActive={activeResult === "url"}
+                        onCopy={handleCopy}
+                        onShowQr={handleShowQr}
+                    />
+                    <QrResultPanel
                         ref={qrResultRef}
-                    >
-                        <div className="w-56 h-56 bg-white rounded-lg flex items-center justify-center relative overflow-hidden shadow-sm">
-                            {qrResultVisible && (
-                                <QrCode
-                                    ref={qrCodeRef}
-                                    value={fullShortUrl}
-                                    size={192}
-                                    level="H"
-                                    id="qr-result"
-                                />
-                            )}
-                        </div>
-                        <div className="flex flex-wrap items-center justify-center gap-3 w-full mt-4">
-                            <button
-                                type="button"
-                                className="inline-flex w-fit max-w-full items-center justify-center gap-2 whitespace-nowrap px-4 py-2.5 bg-white/70 dark:bg-slate-950/50 text-on-surface font-label-bold text-label-bold rounded-lg border border-white/70 dark:border-white/10 hover:bg-white/90 dark:hover:bg-slate-950/70 transition-all active:scale-95"
-                                id="show-link-btn"
-                                onClick={handleShowLink}
-                            >
-                                <span className="material-symbols-outlined text-[18px]">
-                                    link
-                                </span>
-                                <span>{t.showLink}</span>
-                            </button>
-                            <button
-                                type="button"
-                                className="inline-flex w-fit max-w-full items-center justify-center gap-2 whitespace-nowrap px-4 py-2.5 bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold rounded-lg hover:bg-secondary-fixed-dim transition-all active:scale-95"
-                                id="download-qr-btn"
-                                onClick={handleDownloadQr}
-                            >
-                                <span className="material-symbols-outlined text-[18px]">
-                                    download
-                                </span>
-                                <span>{t.downloadQr}</span>
-                            </button>
-                            <button
-                                type="button"
-                                className="inline-flex w-fit max-w-full items-center justify-center gap-2 whitespace-nowrap px-4 py-2.5 bg-primary text-on-primary font-label-bold text-label-bold rounded-lg hover:brightness-95 transition-all active:scale-95"
-                                id="share-qr-btn"
-                                onClick={handleShareQr}
-                            >
-                                <span className="material-symbols-outlined text-[18px]">
-                                    ios_share
-                                </span>
-                                <span>{t.shareQr}</span>
-                            </button>
-                        </div>
-                    </div>
+                        t={t}
+                        fullShortUrl={fullShortUrl}
+                        isActive={activeResult === "qr"}
+                        shouldRenderQr={qrResultVisible}
+                        qrCodeRef={qrCodeRef}
+                        onShowLink={handleShowLink}
+                        onDownload={handleDownloadQr}
+                        onShare={handleShareQr}
+                    />
                 </div>
             </div>
         </section>
