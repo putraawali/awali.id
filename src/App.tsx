@@ -95,7 +95,13 @@ function App() {
     const showToast = (message: string) => {
         let isSuccess = true;
 
-        if (message !== t.toastSuccess && message !== t.toastQrSuccess) {
+        const successMessages: string[] = [
+            t.toastSuccess,
+            t.toastQrSuccess,
+            t.toastShareFallback,
+        ];
+
+        if (!successMessages.includes(message)) {
             isSuccess = false;
         }
 

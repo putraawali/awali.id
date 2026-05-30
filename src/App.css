@@ -77,6 +77,28 @@ header.scrolled .text-on-surface {
     pointer-events: none;
 }
 
+.result-panel-enter {
+    animation: resultPanelEnter 0.28s ease-out both;
+    transform-origin: top center;
+}
+
+@keyframes resultPanelEnter {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .result-panel-enter {
+        animation: none;
+    }
+}
+
 body {
     margin: 0;
     font-family: "Plus Jakarta Sans", system-ui, sans-serif;
@@ -231,4 +253,3 @@ button:disabled {
 button:active .theme-icon-transition {
     transform: rotate(360deg);
 }
-

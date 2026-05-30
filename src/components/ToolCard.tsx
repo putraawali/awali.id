@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { placeholders, type Lang, type Translation } from "../data/content";
 import { shortenUrl } from "../apis/shortenApi";
+import QrCode, { type QrCodeHandle } from "./QrCode";
 
 interface ToolCardProps {
     t: Translation;
@@ -18,10 +19,32 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
     const [activeResult, setActiveResult] = useState<"url" | "qr" | null>(null);
     const [copyLabel, setCopyLabel] = useState<string>(t.copy);
     const [shortenLoading, setShortenLoading] = useState(false);
-    const [generateLoading, setGenerateLoading] = useState(false);
+    const qrCodeRef = useRef<QrCodeHandle>(null);
+    const qrResultRef = useRef<HTMLDivElement>(null);
 
     const urlPlaceholder = placeholders[lang].url;
     const aliasPlaceholder = placeholders[lang].alias;
+    const fullShortUrl = shortenUrlResult
+        ? `${window.location.origin}/${shortenUrlResult}`
+        : "";
+    const urlInputErrorClass =
+        "!border-error !bg-error-container/25 !ring-4 !ring-error/25 dark:!bg-error/10 dark:!ring-error/30";
+
+    const getErrorMessage = (error: unknown) =>
+        error instanceof Error ? error.message : "Something went wrong.";
+
+    useEffect(() => {
+        if (activeResult !== "qr") return;
+
+        const scrollTimeout = window.setTimeout(() => {
+            qrResultRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "end",
+            });
+        }, 80);
+
+        return () => window.clearTimeout(scrollTimeout);
+    }, [activeResult]);
 
     const handleShorten = async () => {
         if (urlInput.trim() === "") {
@@ -43,9 +66,9 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
             showToast(t.toastSuccess);
             setAliasInput("");
             setUrlInput("");
-        } catch (error: any) {
+        } catch (error: unknown) {
             setShortenLoading(false);
-            let toastMessage = error.message;
+            let toastMessage = getErrorMessage(error);
 
             if (toastMessage.toLowerCase().includes("too many requests")) {
                 toastMessage = "Too many requests. Please try again later.";
@@ -57,25 +80,17 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
         }
     };
 
-    const handleGenerateQr = () => {
-        if (urlInput.trim() === "") {
-            setUrlError(true);
-            setTimeout(() => setUrlError(false), 1000);
-            return;
-        }
+    const handleShowQr = () => {
+        setQrResultVisible(true);
+        setActiveResult("qr");
+    };
 
-        setGenerateLoading(true);
-        setTimeout(() => {
-            setGenerateLoading(false);
-            setQrResultVisible(true);
-            setActiveResult("qr");
-            setResultVisible(false);
-            showToast(t.toastQrSuccess);
-        }, 800);
+    const handleShowLink = () => {
+        setActiveResult("url");
     };
 
     const handleCopy = async () => {
-        const fullUrl = `${window.location.origin}/${shortenUrlResult}`;
+        const fullUrl = fullShortUrl;
 
         try {
             if (navigator.clipboard?.writeText) {
@@ -110,6 +125,58 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
         document.body.removeChild(textarea);
     };
 
+    const getQrFileName = () =>
+        `awali-qr-${shortenUrlResult || "code"}`.replace(/[^a-zA-Z0-9_-]/g, "-");
+
+    const handleDownloadQr = async () => {
+        try {
+            await qrCodeRef.current?.download(getQrFileName());
+        } catch {
+            showToast(t.toastQrDownloadFailed);
+        }
+    };
+
+    const handleShareQr = async () => {
+        try {
+            const blob = await qrCodeRef.current?.getBlob();
+
+            if (!blob) {
+                throw new Error("QR image is not ready");
+            }
+
+            const file = new File([blob], `${getQrFileName()}.png`, {
+                type: "image/png",
+            });
+
+            if (navigator.canShare?.({ files: [file] })) {
+                await navigator.share({
+                    title: t.shareQrTitle,
+                    text: fullShortUrl,
+                    files: [file],
+                });
+                return;
+            }
+
+            if (navigator.share) {
+                await navigator.share({
+                    title: t.shareQrTitle,
+                    text: fullShortUrl,
+                    url: fullShortUrl,
+                });
+                return;
+            }
+
+            await handleCopy();
+            showToast(t.toastShareFallback);
+        } catch (error) {
+            if (error instanceof DOMException && error.name === "AbortError") {
+                return;
+            }
+
+            showToast(t.toastShareFailed);
+        }
+    };
+
     return (
         <section className="w-full md:w-1/2 flex items-center justify-center px-container-padding-mb md:px-container-padding-dt py-stack-lg relative overflow-hidden flex-col">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
@@ -127,7 +194,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                     </label>
                     <div className="relative group">
                         <input
-                            className={`w-full bg-white/50 dark:bg-slate-950/40 backdrop-blur-md border-white/60 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 dark:text-white dark:placeholder-slate-400/80 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none ${urlError ? "border-error" : ""
+                            className={`w-full bg-white/50 dark:bg-slate-950/40 backdrop-blur-md border-white/60 dark:border-white/10 focus:border-primary focus:ring-4 focus:ring-primary/10 dark:text-white dark:placeholder-slate-400/80 transition-all duration-300 py-4 px-5 rounded-lg text-body-md font-body-md outline-none ${urlError ? urlInputErrorClass : ""
                                 }`}
                             id="url-input"
                             placeholder={urlPlaceholder}
@@ -175,27 +242,6 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                     >
                         {shortenLoading ? t.creating : t.shortenBtn}
                     </button>
-                    <div className="flex-1 relative group/qr">
-                        <button
-                            className="w-full font-label-bold text-label-bold py-4 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-primary/20 backdrop-blur-md border text-white cursor-not-allowed opacity-80"
-                            id="generate-qr-btn"
-                            style={{
-                                background:
-                                    "linear-gradient(135deg, rgba(56, 189, 248, 0.4) 0%, rgba(2, 132, 199, 0.4) 100%)",
-                                borderColor: "rgba(255, 255, 255, 0.2)",
-                            }}
-                            onClick={handleGenerateQr}
-                            disabled={true}
-                        // disabled={generateLoading}
-                        >
-                            {generateLoading ? t.generating : t.generateQrBtn}
-                        </button>
-                        <div className="absolute -top-1 -right-1 z-30 pointer-events-none">
-                            <div className="bg-white/40 backdrop-blur-md border border-white/60 text-[10px] font-bold text-primary px-2 py-0.5 rounded-full shadow-sm uppercase tracking-tighter">
-                                Soon
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div
                     className={`opacity-0 translate-y-4 transition-all duration-500 pointer-events-none mt-stack-md ${resultVisible || qrResultVisible
@@ -205,7 +251,7 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                     id="result-container"
                 >
                     <div
-                        className={`p-stack-sm bg-white/60 dark:bg-slate-900/60 border border-white/80 dark:border-white/10 rounded-lg flex items-center justify-between ${activeResult === "url" ? "block" : "hidden"
+                        className={`result-panel-enter p-stack-sm bg-white/60 dark:bg-slate-900/60 border border-white/80 dark:border-white/10 rounded-lg flex-col gap-3 sm:flex-row sm:items-center sm:justify-between ${activeResult === "url" ? "flex" : "hidden"
                             }`}
                         id="link-result-ui"
                     >
@@ -229,38 +275,82 @@ export function ToolCard({ t, lang, showToast }: ToolCardProps) {
                                 </span>
                             </span>
                         </div>
-                        <button
-                            type="button"
-                            className="flex items-center gap-2 px-4 py-2 bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold rounded-lg hover:bg-secondary-fixed-dim transition-all active:scale-95"
-                            id="copy-btn"
-                            onClick={handleCopy}
-                        >
-                            <span className="material-symbols-outlined text-[18px]">
-                                content_copy
-                            </span>
-                            <span id="copy-label">{copyLabel}</span>
-                        </button>
+                        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
+                            <button
+                                type="button"
+                                className="inline-flex w-full items-center justify-center gap-2 px-4 py-2 bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold rounded-lg hover:bg-secondary-fixed-dim transition-all active:scale-95 sm:w-auto"
+                                id="copy-btn"
+                                onClick={handleCopy}
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    content_copy
+                                </span>
+                                <span id="copy-label">{copyLabel}</span>
+                            </button>
+                            <button
+                                type="button"
+                                className="inline-flex w-full items-center justify-center gap-2 px-4 py-2 bg-primary text-on-primary font-label-bold text-label-bold rounded-lg hover:brightness-95 transition-all active:scale-95 sm:w-auto"
+                                id="show-qr-btn"
+                                onClick={handleShowQr}
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    qr_code_2
+                                </span>
+                                <span>{t.showQr}</span>
+                            </button>
+                        </div>
                     </div>
                     <div
-                        className={`flex flex-col items-center justify-center p-stack-lg bg-white/40 dark:bg-slate-900/40 rounded-xl border border-white/60 dark:border-white/10 mt-4 ${activeResult === "qr" ? "flex" : "hidden"
+                        className={`result-panel-enter flex flex-col items-center justify-center p-stack-lg bg-white/40 dark:bg-slate-900/40 rounded-xl border border-white/60 dark:border-white/10 mt-4 ${activeResult === "qr" ? "flex" : "hidden"
                             }`}
                         id="qr-result-ui"
+                        ref={qrResultRef}
                     >
-                        <div className="w-48 h-48 bg-surface-container-highest/50 rounded-lg flex items-center justify-center relative overflow-hidden group">
-                            <span className="material-symbols-outlined text-outline-variant text-5xl">
-                                qr_code_2
-                            </span>
-                            <div
-                                className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-slate-950/80"
-                                id="qr-placeholder-text"
+                        <div className="w-56 h-56 bg-white rounded-lg flex items-center justify-center relative overflow-hidden shadow-sm">
+                            {qrResultVisible && (
+                                <QrCode
+                                    ref={qrCodeRef}
+                                    value={fullShortUrl}
+                                    size={192}
+                                    level="H"
+                                    id="qr-result"
+                                />
+                            )}
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-3 w-full mt-4">
+                            <button
+                                type="button"
+                                className="inline-flex w-fit max-w-full items-center justify-center gap-2 whitespace-nowrap px-4 py-2.5 bg-white/70 dark:bg-slate-950/50 text-on-surface font-label-bold text-label-bold rounded-lg border border-white/70 dark:border-white/10 hover:bg-white/90 dark:hover:bg-slate-950/70 transition-all active:scale-95"
+                                id="show-link-btn"
+                                onClick={handleShowLink}
                             >
-                                <span
-                                    className="text-label-sm font-label-sm text-primary"
-                                    id="qr-preview-ready"
-                                >
-                                    {t.previewReady}
+                                <span className="material-symbols-outlined text-[18px]">
+                                    link
                                 </span>
-                            </div>
+                                <span>{t.showLink}</span>
+                            </button>
+                            <button
+                                type="button"
+                                className="inline-flex w-fit max-w-full items-center justify-center gap-2 whitespace-nowrap px-4 py-2.5 bg-secondary-fixed text-on-secondary-fixed font-label-bold text-label-bold rounded-lg hover:bg-secondary-fixed-dim transition-all active:scale-95"
+                                id="download-qr-btn"
+                                onClick={handleDownloadQr}
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    download
+                                </span>
+                                <span>{t.downloadQr}</span>
+                            </button>
+                            <button
+                                type="button"
+                                className="inline-flex w-fit max-w-full items-center justify-center gap-2 whitespace-nowrap px-4 py-2.5 bg-primary text-on-primary font-label-bold text-label-bold rounded-lg hover:brightness-95 transition-all active:scale-95"
+                                id="share-qr-btn"
+                                onClick={handleShareQr}
+                            >
+                                <span className="material-symbols-outlined text-[18px]">
+                                    ios_share
+                                </span>
+                                <span>{t.shareQr}</span>
+                            </button>
                         </div>
                     </div>
                 </div>
